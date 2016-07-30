@@ -1,0 +1,14 @@
+[Unit]
+Description=update-firewall for Scaleway
+Wants=network.target network-online.target
+After=network.target network-online.target
+
+[Service]
+Environment="FWUPD_LOGIN=$KEY"
+Environment="FWUPD_TAG=$TAG"
+ExecStart=/usr/bin/update-firewall
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

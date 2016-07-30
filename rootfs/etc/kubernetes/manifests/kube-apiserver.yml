@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-apiserver
+  namespace: kube-system
+spec:
+  hostNetwork: true
+  containers:
+  - name: kube-apiserver
+    image: eu.gcr.io/google_containers/hyperkube:v1.3.0
+    command:
+    - /hyperkube
+    - apiserver
+    - --bind-address=0.0.0.0
+    - --etcd-servers=http://127.0.0.1:4001
+    - --cloud-provider=gce
+    - --service-cluster-ip-range=10.60.0.0/16
+    - --allow-privileged=true
+    - --client-ca-file=/etc/kubernetes/ca.pem
+    - --tls-cert-file=/etc/kubernetes/apiserver.pem
+    - --tls-private-key-file=/etc/kubernetes/apiserver-key.pem
+    - --basic-auth-file=/etc/kubernetes/basic_auth.csv
+    - --token-auth-file=/etc/kubernetes/known_tokens.csv
+    - --secure-port=443
+    - --admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota
+    - --service-account-key-file=/etc/kubernetes/apiserver-key.pem
+    - --logtostderr=true
+    ports:
+    - containerPort: 443
+      hostPort: 443
+      name: https
+    - containerPort: 7080
+      hostPort: 7080
+      name: http
+    - containerPort: 8080
+      hostPort: 8080
+      name: local
+    volumeMounts:
+    - mountPath: /etc/kubernetes
+      name: etckube
+      readOnly: true
+    - mountPath: /etc/ssl
+      name: etcssl
+      readOnly: true
+  volumes:
+  - hostPath:
+      path: /etc/kubernetes
+    name: etckube
+  - hostPath:
+      path: /etc/ssl
+    name: etcssl

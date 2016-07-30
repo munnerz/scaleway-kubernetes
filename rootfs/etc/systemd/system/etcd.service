@@ -1,0 +1,20 @@
+[Unit]
+Description=etcd
+Wants=network.target network-online.target
+After=network.target network-online.target
+
+[Service]
+Environment=ETCD_DATA_DIR=/var/lib/etcd
+Environment=ETCD_NAME=$HOST
+Environment="ETCD_DISCOVERY$DISCOVER"
+Environment="ETCD_PEER_ADDR=$PEERADDR"
+Environment="ETCD_PROXY=$PROXY"
+Environment="ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379,http://0.0.0.0:4001"
+Environment="ETCD_ADVERTISE_CLIENT_URLS=$ADVURL"
+ExecStartPre = /bin/bash -c 'if test -d /var/lib/etcd/proxy && test -d /var/lib/etcd/member; then mv /var/lib/etcd /var/lib/etcd`date +%s`; fi'
+ExecStart = /usr/bin/etcd
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
