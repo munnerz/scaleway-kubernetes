@@ -6,6 +6,9 @@ MAINTAINER James Munnelly <james@munnelly.eu>
 #   This script prevent aptitude to run services when installed
 RUN /usr/local/sbin/builder-enter
 
+# Add early-docker group
+RUN addgroup early-docker
+
 # Install docker dependencies & upgrade system
 RUN apt-get -q update \
 	&& apt-get -y -qq upgrade \
@@ -25,8 +28,7 @@ RUN apt-get -q update \
 	&& apt-get clean
 
 # Install docker
-RUN curl -L https://get.docker.com/ | sh \
-    && systemctl disable docker && systemctl enable docker
+RUN curl -L https://get.docker.com/ | sh
 
 # Install etcd
 RUN wget https://github.com/coreos/etcd/releases/download/v3.0.4/etcd-v3.0.4-linux-amd64.tar.gz \
@@ -40,9 +42,15 @@ RUN wget https://github.com/coreos/flannel/releases/download/v0.5.5/flannel-0.5.
     && mv flannel-0.5.5/flanneld /usr/bin/ \
     && rm -Rf flannel-0.5.5 flannel-0.5.5-linux-amd64.tar.gz
 
-
 # Add local files into the root (extra config etc)
 COPY ./rootfs/ /
+
+RUN systemctl enable docker \
+    && systemctl enable early-docker \
+    && systemctl enable etcd \
+    && systemctl enable flannel \
+    && systemctl enable update-firewall \
+    && systemctl enable kubelet
 
 # Clean rootfs from image-builder.
 #   Revert the builder-enter script

@@ -8,6 +8,7 @@ ExecStart=/opt/bin/kubelet \
         --allow-privileged=true \
         --config=/etc/kubernetes/manifests \
         --node-labels="role=master" \
+        --hostname-override="$public_ipv4" \
         --cluster-dns=10.60.254.254 \
         --cluster-domain=cluster.local
 Restart=always
