@@ -1,17 +1,19 @@
 [Unit]
-Description=Network fabric for containers
-Documentation=https://github.com/coreos/flannel
-Requires=docker.service
-Before=docker.service
+Description=flannel
+Wants=network.target network-online.target early-docker.service etcd.service
+After=network.target network-online.target early-docker.service etcd.service
 
 [Service]
-Type=notify
-Restart=always
-RestartSec=5
-Environment="TMPDIR=/var/tmp/"
-Environment="DOCKER_HOST=unix:///var/run/docker.sock"
+Environment=DOCKER_HOST=unix:///var/run/early-docker.sock
 ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": "100.64.0.0/10" }'
-ExecStart=/usr/bin/flanneld
+ExecStart = /usr/bin/docker run \
+				--net=host \
+				--privileged \
+				-v /run/flannel:/run/flannel \
+				quay.io/coreos/flannel:0.5.5 \
+				  /opt/bin/flanneld
+Restart=always
+RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target

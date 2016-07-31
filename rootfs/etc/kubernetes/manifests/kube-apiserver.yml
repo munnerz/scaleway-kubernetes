@@ -12,7 +12,7 @@ spec:
     - /hyperkube
     - apiserver
     - --bind-address=0.0.0.0
-    - --etcd-servers=http://127.0.0.1:4001
+    - --etcd-servers=http://127.0.0.1:2379
     - --service-cluster-ip-range=10.60.0.0/16
     - --allow-privileged=true
     - --client-ca-file=/etc/kubernetes/ca.pem

@@ -6,7 +6,7 @@ After=network.target network-online.target scw-setup.service
 [Service]
 EnvironmentFile=-/etc/scw-env
 ExecStartPre=/bin/mkdir -p /etc/kubernetes/manifests /var/lib/kubelet /opt/bin
-ExecStartPre=/usr/bin/curl -L -o /opt/bin/kubelet -z /opt/bin/kubelet https://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/arm/kubelet
+ExecStartPre=/usr/bin/curl -L -o /opt/bin/kubelet -z /opt/bin/kubelet https://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/amd64/kubelet
 ExecStartPre=/bin/chmod +x /opt/bin/kubelet
 ExecStart=/opt/bin/kubelet \
         --api_servers=http://127.0.0.1:8080 \
@@ -14,7 +14,6 @@ ExecStart=/opt/bin/kubelet \
         --allow-privileged=true \
         --config=/etc/kubernetes/manifests \
         --node-labels="role=master" \
-        --hostname-override="$public_ipv4" \
         --cluster-dns=10.60.254.254 \
         --cluster-domain=cluster.local
 Restart=always

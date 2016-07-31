@@ -8,7 +8,7 @@ Requires=docker.socket flannel.service
 EnvironmentFile=-/etc/default/docker
 EnvironmentFile=-/etc/default/docker.d/*
 EnvironmentFile=-/etc/sysconfig/docker
-EnvironmentFile=-/run/flannel/docker
+EnvironmentFile=-/run/flannel/subnet.env
 ExecStart=/usr/bin/docker daemon -H fd:// $DOCKER_OPTS --bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU}
 MountFlags=slave
 LimitNOFILE=1048576
