@@ -1,11 +1,10 @@
 [Unit]
 Description=update-firewall for Scaleway
-Wants=network.target network-online.target
-After=network.target network-online.target
+Wants=network.target network-online.target scw-setup.service
+After=network.target network-online.target scw-setup.service
 
 [Service]
-Environment="FWUPD_LOGIN=$KEY"
-Environment="FWUPD_TAG=$TAG"
+EnvironmentFile=-/etc/scw-env
 ExecStart=/usr/bin/update-firewall
 Restart=always
 RestartSec=10s

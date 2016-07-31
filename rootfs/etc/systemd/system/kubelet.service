@@ -1,4 +1,10 @@
+[Unit]
+Description=Kubernetes Kubelet
+Wants=network.target network-online.target scw-setup.service
+After=network.target network-online.target scw-setup.service
+
 [Service]
+EnvironmentFile=-/etc/scw-env
 ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/manifests /var/lib/kubelet /opt/bin
 ExecStartPre=/usr/bin/curl -L -o /opt/bin/kubelet -z /opt/bin/kubelet https://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/arm/kubelet
 ExecStartPre=/usr/bin/chmod +x /opt/bin/kubelet
@@ -14,4 +20,5 @@ ExecStart=/opt/bin/kubelet \
 Restart=always
 RestartSec=10
 [Install]
+
 WantedBy=multi-user.target

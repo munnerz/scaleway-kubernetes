@@ -2,7 +2,7 @@
 Description=Early Docker Application Container Engine
 Documentation=https://docs.docker.com
 After=network.target early-docker.socket
-Requires=docker.socket
+Requires=early-docker.socket
 
 [Service]
 EnvironmentFile=-/etc/default/early-docker
