@@ -1,6 +1,6 @@
 [Unit]
 Description=Early Docker Application Container Engine
-Documentation=https://docs.docker.com
+Documentation=http://docs.docker.com
 After=network.target early-docker.socket
 Requires=early-docker.socket
 
@@ -8,11 +8,12 @@ Requires=early-docker.socket
 EnvironmentFile=-/etc/default/early-docker
 EnvironmentFile=-/etc/default/early-docker.d/*
 EnvironmentFile=-/etc/sysconfig/early-docker
-ExecStart=/usr/bin/docker daemon -H fd:// $DOCKER_OPTS
+Environment="DOCKER_CGROUPS=--exec-opt native.cgroupdriver=systemd"
+Environment=TMPDIR=/var/tmp
 MountFlags=slave
 LimitNOFILE=1048576
 LimitNPROC=1048576
-LimitCORE=infinity
+ExecStart=/usr/bin/docker daemon --host=fd:// --bridge=none --iptables=false --ip-masq=false --exec-root=/var/run/early-docker --graph=/var/lib/early-docker --pidfile=/var/run/early-docker.pid $DOCKER_OPTS $DOCKER_CGROUPS
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=early-docker.target

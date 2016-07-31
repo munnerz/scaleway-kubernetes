@@ -18,9 +18,9 @@ if [ ! -f /etc/scw-int-done-setup ]; then
     fi
     echo "ETCD_NAME=$HOST" >>/etc/scw-env
     echo "ETCD_DISCOVERY=$DISCOVER" >>/etc/scw-env
-    echo "ETCD_PEER_ADDR="$SCWIP >>/etc/scw-env
-    echo "ETCD_LISTEN_CLIENT_URLS=http://$SCWIP:2379,http://$SCWIP:4001" >>/etc/scw-env
-    echo "ETCD_ADVERTISE_CLIENT_URLS=http://$SCWIP:2379"
+    echo "ETCD_PEER_ADDR=0.0.0.0" >>/etc/scw-env
+    echo "ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379,http://0.0.0.0:4001" >>/etc/scw-env
+    echo "ETCD_ADVERTISE_CLIENT_URLS=http://$SCWIP:2379,http://$SCWIP:4001"
     echo "FWUPD_LOGIN="$APIKEY >>/etc/scw-env
     echo "FWUPD_TAG=discover:"$DISCOVER >>/etc/scw-env
     echo "private_ipv4="$SCWIP >>/etc/scw-env

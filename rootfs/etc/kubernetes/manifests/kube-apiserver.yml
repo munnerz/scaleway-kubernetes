@@ -13,7 +13,6 @@ spec:
     - apiserver
     - --bind-address=0.0.0.0
     - --etcd-servers=http://127.0.0.1:4001
-    - --cloud-provider=gce
     - --service-cluster-ip-range=10.60.0.0/16
     - --allow-privileged=true
     - --client-ca-file=/etc/kubernetes/ca.pem
