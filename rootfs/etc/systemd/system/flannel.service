@@ -5,7 +5,7 @@ After=network.target network-online.target early-docker.service etcd.service
 
 [Service]
 Environment=DOCKER_HOST=unix:///var/run/early-docker.sock
-ExecStartPre=/usr/bin/etcdctl set /coreos.com/network/config '{ "Network": "100.64.0.0/10" }'
+ExecStartPre=/usr/bin/curl -L -X PUT http://127.0.0.1:2379/v2/keys/coreos.com/network/config -d value="{\"Network\":\"100.64.0.0/10\" }"
 ExecStart = /usr/bin/docker run \
 				--net=host \
 				--privileged \

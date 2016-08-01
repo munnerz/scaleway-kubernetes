@@ -15,6 +15,7 @@ ExecStart=/opt/bin/kubelet \
         --config=/etc/kubernetes/manifests \
         --node-labels="role=master" \
         --cluster-dns=10.60.254.254 \
+        --hostname-override="${PRIVATE_IPV4}" \
         --cluster-domain=cluster.local
 Restart=always
 RestartSec=10
